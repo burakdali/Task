@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/userProducts', [UsersController::class, 'userProducts'])->name('userProducts');
 
 
 
@@ -38,10 +39,17 @@ Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::post('/saveProduct', [ProductsController::class, 'saveProduct'])->name('saveProduct');
     Route::post('/deleteProduct/{id}', [ProductsController::class, 'deleteProduct'])->name('deleteProduct');
     Route::post('/editProduct/{id}/', [ProductsController::class, 'editProduct'])->name('editProduct');
+    Route::post('/updateProduct', [ProductsController::class, 'updateProduct'])->name('updateProduct');
+    Route::get('/getProductsToAssign', [ProductsController::class, 'getProductsToAssign'])->name('getProductsToAssign');
+
     #users
     Route::get('/users', [UsersController::class, 'index'])->name('users');
     Route::get('/addUser', [UsersController::class, 'addUser'])->name('addUser');
     Route::post('/storeUser', [UsersController::class, 'storeUser'])->name('storeUser');
+    Route::post('/updateUser', [UsersController::class, 'updateUser'])->name('updateUser');
+    Route::post('/deleteUser/{id}', [UsersController::class, 'deleteUser'])->name('deleteUser');
+    Route::post('/editUser/{id}', [UsersController::class, 'editUser'])->name('editUser');
     Route::get('/getUsers', [UsersController::class, 'getUsers'])->name('getUsers');
+    Route::post('/assignSave', [UsersController::class, 'assignSave'])->name('assignSave');
 });
 require __DIR__ . '/auth.php';

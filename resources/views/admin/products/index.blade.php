@@ -28,6 +28,43 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm" action="/updateProduct" enctype="multipart/form-data" method="post">
+                        @csrf
+                        <input type="text" class="form-control" id="productId" name="id" hidden>
+
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="col-form-label">description:</label>
+                            <textarea type="text" class="form-control" id="description" name="description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="col-form-label">image:</label>
+                            <input type="file" class="form-control" id="image" name="image">
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" type="submit" id="editProductBtn">Update
+                                Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </x-admin-layout>
 <script type="text/javascript">
     $(function() {
@@ -57,33 +94,43 @@
     });
 </script>
 <script>
-    $(document).on("click", ".delete", function() {
-        var id = $(this).attr('id');
-        $.ajax({
-            type: 'post',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: "/deleteProduct/" + id + "/",
-            dataType: "json",
-            success: function(response) {
-                swal("Good job!", response.result, "success");
-            }
-        })
-    });
-
-    $(document).on("click", ".edit", function(event) {
-        var id = $(this).attr('id');
-        $.ajax({
-            type: 'post',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: "/editProduct/" + id + "/",
-            dataType: "json",
-            success: function(response) {
-                console.log('done' + response);
-            }
+    $(document).ready(function() {
+        $(document).on("click", ".delete", function() {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/deleteProduct/" + id + "/",
+                dataType: "json",
+                success: function(response) {
+                    swal("Good job!", response.result, "success");
+                }
+            })
         });
+
+        $(document).on("click", ".edit", function(event) {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/editProduct/" + id + "/",
+                dataType: "json",
+                success: function(response) {
+                    $('#name').val(response.result.name);
+                    $('#description').val(response.result.description);
+                    $('#productId').val(response.result.id);
+                }
+            });
+        });
+
     });
 </script>
+@if (Session::has('success'))
+    <script>
+        swal("Good job!", "Product edited successfully", "success");
+    </script>
+@endif

@@ -396,19 +396,30 @@
         @if (Route::has('login'))
             <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                 @auth
-                    <a href="{{ url('/dashboard') }}"
-                        class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+
+                    @if (Auth::user()->is_admin)
+                        <a href="{{ url('/dashboard') }}"
+                            class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+                    @endif
                 @else
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
-                    {{-- @if (Route::has('register'))
-                        <a href="{{ route('register') }}"
-                            class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                    @endif --}}
                 @endauth
             </div>
         @endif
+        @if (auth()->check() && !auth()->user()->is_admin)
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    :href="route('logout')"
+                    onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                    {{ __('Log Out') }}
+                </a>
 
+            </form>
+            <a href="/userProducts">My Products</a>
+        @endif
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
                 <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -435,7 +446,8 @@
 
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                Laravel has wonderful, thorough documentation covering every aspect of the framework.
+                                Laravel has wonderful, thorough documentation covering every aspect of the
+                                framework.
                                 Whether you are new to the framework or have previous experience with Laravel, we
                                 recommend reading all of the documentation from beginning to end.
                             </div>
@@ -456,7 +468,8 @@
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
                                 Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript
-                                development. Check them out, see for yourself, and massively level up your development
+                                development. Check them out, see for yourself, and massively level up your
+                                development
                                 skills in the process.
                             </div>
                         </div>
@@ -475,7 +488,8 @@
 
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                Laravel News is a community driven portal and newsletter aggregating all of the latest
+                                Laravel News is a community driven portal and newsletter aggregating all of the
+                                latest
                                 and most important news in the Laravel ecosystem, including new package releases and
                                 tutorials.
                             </div>
@@ -499,7 +513,8 @@
                                     href="https://forge.laravel.com" class="underline">Forge</a>, <a
                                     href="https://vapor.laravel.com" class="underline">Vapor</a>, <a
                                     href="https://nova.laravel.com" class="underline">Nova</a>, and <a
-                                    href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects
+                                    href="https://envoyer.io" class="underline">Envoyer</a> help you take your
+                                projects
                                 to the next level. Pair them with powerful open source libraries like <a
                                     href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a
                                     href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a
